@@ -28,23 +28,24 @@ public class Main {
 				char recordCode = record.getRecordCode();
 				switch (recordCode) {
 				case RC_OWNER_INFO:
+					invoice.clear();
+					service.clear();
 					invoice.setOwnerTelNumber(record.getOwnerTelNumber());
 					break;
 				case RC_SERVICE_INFO:
 					service.checkService(record);
 					break;
 				case RC_CALL_LOG:
-					invoice.addCallCharge(
-							record.getCallMinutes() * service.calcUnitPrice(record, INITIAL_CALL_UNIT_PRICE));
+					invoice.addCallCharge(record.getCallMinutes() * service.calcUnitPrice(record, INITIAL_CALL_UNIT_PRICE));
 					break;
 				case RC_SEPARATOR:
 					invoice.setBasicCharge(service.calcBasicCharge(INITIAL_BASIC_CHARGE));
 					writer.write(invoice);
-					invoice.clear();
-					service.clear();
 					break;
 				}
 			}
+			reader.close();
+			writer.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
