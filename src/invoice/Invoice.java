@@ -6,14 +6,9 @@ public class Invoice {
 	private int callCharge = 0;
 
 	Invoice() {
-		this.ownerTelNumber = null;
-		this.basicCharge = 1000;
-		this.callCharge = 0;
-
 		this.setOwnerTelNumber(ownerTelNumber);
 		this.setBasicCharge(basicCharge);
 		this.addCallCharge(callCharge);
-
 	}
 
 	public String getOwnerTelNumber() {
