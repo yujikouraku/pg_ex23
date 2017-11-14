@@ -1,7 +1,6 @@
 package invoice;
 
 import service.Record;
-import service.Service;
 import service.ServiceCollection;
 
 public class Main {
@@ -13,9 +12,7 @@ public class Main {
 	private static final char RC_CALL_LOG = '5';
 	private static final char RC_SEPARATOR = '9';
 
-
 	public static void main(String[] args) {
-
 
 		// 処理開始
 		ServiceCollection service = new ServiceCollection();
@@ -27,45 +24,30 @@ public class Main {
 
 			Invoice invoice = new Invoice();
 
-			for (Record record = reader.read(); record != null;record = reader.read()) {
+			for (Record record = reader.read(); record != null; record = reader.read()) {
 				char recordCode = record.getRecordCode();
-				switch(recordCode){
+				switch (recordCode) {
 				case RC_OWNER_INFO:
 					invoice.setOwnerTelNumber(record.getOwnerTelNumber());
 					break;
 				case RC_SERVICE_INFO:
-					service(service, record);
+					service.checkService(record);
 					break;
 				case RC_CALL_LOG:
-					call(invoice, service, record);
+					invoice.addCallCharge(
+							record.getCallMinutes() * service.calcUnitPrice(record, INITIAL_CALL_UNIT_PRICE));
 					break;
 				case RC_SEPARATOR:
-					separate(invoice, service, writer);
+					invoice.setBasicCharge(service.calcBasicCharge(INITIAL_BASIC_CHARGE));
+					writer.write(invoice);
+					invoice.clear();
+					service.clear();
 					break;
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	private static void service(Service service, Record record) {
-		service.checkService(record);
-	}
-
-	private static void call(Invoice invoice, Service service, Record record) {
-		int callDuration = record.getCallMinutes(); // 通話時間
-		int unitPrice = service.calcUnitPrice(record, INITIAL_CALL_UNIT_PRICE); //通話単価
-		int callCharge = unitPrice * callDuration; //通話料金
-		invoice.addCallCharge(callCharge);
-	}
-
-	private static void separate(Invoice invoice, Service service, InvoiceWriter writer) {
-		int basicCharge = service.calcBasicCharge(INITIAL_BASIC_CHARGE);
-		invoice.setBasicCharge(basicCharge);
-		writer.write(invoice);
-		invoice.clear();
-		service.clear();
 	}
 
 }
