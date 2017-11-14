@@ -1,17 +1,15 @@
 package service;
 
 public class ServiceCollection implements Service {
-	private int fs_count = 0;
 
 	// Serviceインスタンス生成
-	Service[] services = {new DayService(),new NightService(), new FamilyService()};
+	Service[] services = { new DayService(), new NightService(), new FamilyService() };
 
 	@Override
 	public void clear() {
 		for (int i = 0; i < services.length; i++) {
 			services[i].clear();
 		}
-		fs_count = 0;
 	}
 
 	@Override
@@ -31,10 +29,8 @@ public class ServiceCollection implements Service {
 
 	@Override
 	public int calcBasicCharge(int basicCharge) {
-		basicCharge = services[0].calcBasicCharge(basicCharge);
-		if (fs_count == 0) {
-			basicCharge = services[1].calcBasicCharge(basicCharge);
-			fs_count += 1;
+		for (int i = 0; i < services.length; i++) {
+			basicCharge = services[i].calcBasicCharge(basicCharge);
 		}
 		return basicCharge;
 	}

@@ -27,24 +27,23 @@ public class Main {
 
 			Invoice invoice = new Invoice();
 
-			Record record = reader.read();
-			while (record != null) {
+			for (Record record = reader.read(); record != null;record = reader.read()) {
 				char recordCode = record.getRecordCode();
-
 				switch(recordCode){
 				case RC_OWNER_INFO:
 					invoice.setOwnerTelNumber(record.getOwnerTelNumber());
+					break;
 				case RC_SERVICE_INFO:
 					service(service, record);
+					break;
 				case RC_CALL_LOG:
 					call(invoice, service, record);
+					break;
 				case RC_SEPARATOR:
 					separate(invoice, service, writer);
-
+					break;
 				}
 			}
-
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

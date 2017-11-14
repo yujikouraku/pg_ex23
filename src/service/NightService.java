@@ -6,9 +6,11 @@ public class NightService extends TimeService {
 	private static final String SERVICE_CODE = "E2";
 	private static final int BASIC_CHARGE = 500;
 
-
 	public boolean isServiceTime(int hour) {
-		return (START_TIME <= hour || hour <= END_TIME);
+		if (this.isJoined()) {
+			return (START_TIME <= hour || hour <= END_TIME);
+		}
+		return false;
 	}
 
 	@Override

@@ -6,10 +6,12 @@ public class DayService extends TimeService {
 	private static final String SERVICE_CODE = "E1";
 	private static final int BASIC_CHARGE = 200;
 
-
 	@Override
 	public boolean isServiceTime(int hour) {
-		return (START_TIME <= hour && hour <= END_TIME);
+		if (this.isJoined()) {
+			return (START_TIME <= hour && hour <= END_TIME);
+		}
+		return false;
 	}
 
 	@Override
@@ -26,8 +28,5 @@ public class DayService extends TimeService {
 	public int getBasicCharge() {
 		return BASIC_CHARGE;
 	}
-
-
-
 
 }

@@ -30,7 +30,6 @@ abstract class TimeService implements Service {
 	@Override
 	public int calcUnitPrice(Record record, int unitPrice) {
 		int starthour = record.getStartHour(); // 通話開始時間取得
-		// 昼トク割引対象の時間の場合は、単価を5円引き
 		if (this.isServiceTime(starthour)) {
 			unitPrice -= this.getDiscount();
 		}
@@ -41,9 +40,8 @@ abstract class TimeService implements Service {
 
 	@Override
 	public int calcBasicCharge(int basicCharge) {
-		// 昼トク割引加入者の場合は基本料金200円増し
 		if (this.isJoined()) {
-			basicCharge -= this.getBasicCharge();
+			basicCharge += this.getBasicCharge();
 		}
 		return basicCharge;
 	}
